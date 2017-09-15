@@ -37,10 +37,12 @@ let goodOptions = {
 
 const walkSync = (dir, filelist = []) => {
 	fs.readdirSync(dir).forEach(file => {
-    	filelist = fs.statSync(Path.join(dir, file)).isDirectory()
-    		? walkSync(Path.join(dir, file), filelist)
-    		: filelist.concat(Path.join(dir, file));
-    	})
+		if(!(/^\./.test(file))) {
+	    	filelist = fs.statSync(Path.join(dir, file)).isDirectory()
+	    		? walkSync(Path.join(dir, file), filelist)
+	    		: filelist.concat(Path.join(dir, file));
+    	}})
+	// server.log(filelist)
     return filelist;
 }
 
