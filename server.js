@@ -10,7 +10,8 @@ const Good = require('good')
 const server = new Hapi.Server()
 server.connection({
 	host: 'localhost',
-	port: 8080
+	port: 8080,
+	routes: { cors: true }
 })
 
 let goodOptions = {
