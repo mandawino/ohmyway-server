@@ -31,7 +31,7 @@ let goodOptions = {
 		//		module: 'good-file',
 		//		args: [{ log: ['error']}]
 		//	},
-		//	'logs/logfile' // TODO Chane with a file
+		//	'logs/logfile' // TODO Change with a file
 		//]
 	}
 }
@@ -43,7 +43,12 @@ const walkSync = (dir, filelist = []) => {
 	    		? walkSync(Path.join(dir, file), filelist)
 	    		: filelist.concat(Path.join(dir, file));
     	}})
-	// server.log(filelist)
+	server.log(filelist)
+	//result = {}
+	//filelist.forEach((image, index) => {
+	//	server.log(image)
+	//	result.index = image
+	//})
     return filelist;
 }
 
@@ -68,9 +73,31 @@ server.register([{
 
 	server.route({
 		method: 'GET',
-		path: '/list',
+		path: '/images',
 		handler: (request, reply) => {
-			reply(walkSync(Path.join(__dirname, 'images')))
+			reply.response(walkSync(Path.join(__dirname, 'images'))).type('text/plain')
+		}
+	})
+
+	server.route({
+		method: 'GET',
+		path:'/image',
+		handler: function (request, reply) { // async
+			const path = request.query.path;
+			server.log(path)
+			//const image = fs.readFileSync(path);
+			// server.log('image', image)
+			//var buf = Buffer.from(image);
+			//server.log('buf', buf)
+			//var res = buf.toString('base64')
+			//server.log('res', res)
+			//reply(res)
+
+			//reply(buf).bytes(buf.length).header('Content-type', 'image/jpg');
+			// const path = encodeURIComponent(request.params.imagePath);
+			reply.file(path).encoding('base64')
+			// .header('Content-type','image/jpg');
+			// .header('Content-Disposition','inline')
 		}
 	})
 
