@@ -63,6 +63,14 @@ server.register([{
 
 	server.route({
 		method: 'GET',
+		path: '/',
+		handler: (request, reply) => {
+			reply('bonjour')
+		}
+	})
+
+	server.route({
+		method: 'GET',
 		path: '/{image*}',
 		handler: {
 			directory: {
