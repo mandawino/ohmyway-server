@@ -36,7 +36,8 @@ const walkSync = (dir, filelist = []) => {
 	    		? walkSync(Path.join(dir, file), filelist)
 	    		: filelist.concat(Path.join(dir, file));
     	}})
-	server.log(filelist)
+	// server.log(filelist)
+	
 	//result = {}
 	//filelist.forEach((image, index) => {
 	//	server.log(image)
@@ -71,9 +72,13 @@ server.route({
 
 server.route({
 	method: 'GET',
-	path: '/images',
+	path: '/images/{country?}',
 	handler: (request, h) => {
-		const response = h.response(walkSync(Path.join(__dirname, 'images')))
+		const country = encodeURIComponent(request.params.country)
+		server.log(country)
+		const response = country 
+				? h.response(walkSync(Path.join(__dirname, 'images', country))) 
+				: h.response(walkSync(Path.join(__dirname, 'images')))
 		response.type('text/plain')
 		return response
 	}
@@ -84,7 +89,7 @@ server.route({
 	path:'/image',
 	handler: (request, h) => {
 		const path = request.query.path;
-		server.log(path)
+		// server.log(path)
 		const response = h.file(path)
 		return response.encoding('base64')
 		//const image = fs.readFileSync(path);
