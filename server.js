@@ -91,7 +91,9 @@ server.route({
 		const path = request.query.path;
 		// server.log(path)
 		const response = h.file(path)
-		return response.encoding('base64')
+		//return response.encoding('base64')
+		return response
+		
 		//const image = fs.readFileSync(path);
 		// server.log('image', image)
 		//var buf = Buffer.from(image);
