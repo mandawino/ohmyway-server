@@ -29,12 +29,12 @@ let goodOptions = {
 	}
 }
 
-const walkSync = (dir, filelist = []) => {
+const scan = (dir, filelist = {}) => {
 	fs.readdirSync(dir).forEach(file => {
 		if(!(/^\./.test(file))) {
-	    	filelist = fs.statSync(Path.join(dir, file)).isDirectory()
-	    		? walkSync(Path.join(dir, file), filelist)
-	    		: filelist.concat(Path.join(dir, file));
+	    	filelist[file] = fs.statSync(Path.join(dir, file)).isDirectory()
+	    		? scan(Path.join(dir, file), filelist[file])
+	    		: Path.join(dir, file);
     	}})
 	// server.log(filelist)
 	
@@ -72,13 +72,26 @@ server.route({
 
 server.route({
 	method: 'GET',
-	path: '/images/{country?}',
+	path: '/images',
 	handler: (request, h) => {
 		const country = encodeURIComponent(request.params.country)
 		server.log(country)
-		const response = country 
-				? h.response(walkSync(Path.join(__dirname, 'images', country))) 
-				: h.response(walkSync(Path.join(__dirname, 'images')))
+		const response = h.response(scan(Path.join(__dirname, 'images')))
+		server.log(response)
+		response.type('text/plain')
+		return response
+	}
+})
+
+
+server.route({
+	method: 'GET',
+	path: '/images/{country}',
+	handler: (request, h) => {
+		const country = encodeURIComponent(request.params.country)
+		server.log(country)
+		const response = h.response(scan(Path.join(__dirname, 'images', country))) 
+		server.log(response)
 		response.type('text/plain')
 		return response
 	}
@@ -93,7 +106,7 @@ server.route({
 		const response = h.file(path)
 		//return response.encoding('base64')
 		return response
-		
+
 		//const image = fs.readFileSync(path);
 		// server.log('image', image)
 		//var buf = Buffer.from(image);
