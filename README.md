@@ -9,7 +9,9 @@ This project uses :
 - **ohmyway-client** (client side): React, Redux, Reactstrap (Bootstrap), CSS grid layout, Webpack, Babel...
 - **ohmyway-server** (server side): Hapi (a server framework for Node.js)
 
+
 This is only a first draft which I would like to improve in the near future.
+
 Here are the next TODO steps I need to work on:
 - Add tests on both sides of the application
 - Use a database to store the images and other data (currently directly stored in the filesystem)
@@ -41,4 +43,5 @@ npm install
 npm start
 ```
 
-Now you can go to localhost:3000 in you browser to access the client, or localhost:8080 if you want to directly access the server.
+Now you can go to **localhost:3000** in you browser to access the client,
+or **localhost:8080** if you want to directly access the server.
